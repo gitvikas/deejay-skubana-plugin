@@ -1,6 +1,5 @@
 package com.symphonycommerce.deejay.skubana.model;
 
-
 import com.google.common.base.MoreObjects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,184 +16,242 @@ import java.util.Optional;
 
 /**
  * Order Model for Channel Advisor. This model is defined in accordance with the following
- * definitions from Channel Advisor: https://developer.channeladvisor.com/working-with-orders/order-entities
- * You can see all possible scenarios that this object and it's supporting methods should and can
- * support by going here:
+ * definitions from Channel Advisor:
+ * https://developer.channeladvisor.com/working-with-orders/order-entities You can see all possible
+ * scenarios that this object and it's supporting methods should and can support by going here:
  * https://developer.channeladvisor.com/files/9044106/9044095/2/1474404951928/REST+API+Order+Scenarios.pdf
  */
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Order implements OrderEntity {
 
-  enum OrderShippingStatus {
-    Unshipped,
-    Shipped,
-    PartiallyShipped,
-    PendingShipment,
-    Canceled,
-    ThirdPartyManaged
-  }
-
-  enum OrderPaymentStatus {
-    NotYetSubmitted,
-    Cleared,
-    Submitted,
-    Failed,
-    Deposited
-  }
-
   @JsonProperty("ID")
   private Long id;
+
   @JsonProperty("ProfileID")
   private Long profileId;
+
   @JsonProperty("SiteID")
   private Long siteId;
+
   @JsonProperty("SiteName")
   private String siteName;
+
   @JsonProperty("SiteOrderID")
   private String siteOrderId;
+
   @JsonProperty("SecondarySiteOrderID")
   private String secondarySiteOrderId;
+
   @JsonProperty("SellerOrderID")
   private String sellerOrderId;
+
   @JsonProperty("CheckoutSourceID")
   private String checkoutSourceId;
+
   @JsonProperty("CreatedDateUtc")
   private Date createdDateUtc;
+
   @JsonProperty("ImportDateUtc")
   private Date importDateUtc;
+
   @JsonProperty("PublicNotes")
   private String publicNotes;
+
   @JsonProperty("PrivateNotes")
   private String privateNotes;
+
   @JsonProperty("SpecialInstructions")
   private String specialInstructions;
+
   @JsonProperty("TotalPrice")
   private BigDecimal totalPrice;
+
   @JsonProperty("TotalTaxPrice")
   private BigDecimal totalTaxPrice;
+
   @JsonProperty("TotalShippingPrice")
   private BigDecimal totalShippingPrice;
+
   @JsonProperty("TotalShippingTaxPrice")
   private BigDecimal totalShippingTaxPrice;
+
   @JsonProperty("TotalInsurancePrice")
   private BigDecimal totalInsurancePrice;
+
   @JsonProperty("TotalGiftOptionPrice")
   private BigDecimal totalGiftOptionPrice;
+
   @JsonProperty("TotalGiftOptionTaxPrice")
   private BigDecimal totalGiftOptionTaxPrice;
+
   @JsonProperty("AdditionalCostOrDiscount")
   private BigDecimal additionalCostOrDiscount;
+
   @JsonProperty("EstimatedShipDateUtc")
   private Date estimatedShipDateUtc;
+
   @JsonProperty("DeliverByDateUtc")
   private Date deliverByDateUtc;
+
   @JsonProperty("ResellerID")
   private String resellerId;
+
   @JsonProperty("FlagDescription")
   private String flagDescription;
+
   @JsonProperty("FlagID")
   private String flagId;
+
   @JsonProperty("OrderTags")
   private String orderTags;
+
   @JsonProperty("DistributionCenterTypeRollup")
   private String distributionCenterTypeRollup;
+
   @JsonProperty("CheckoutStatus")
   private String checkoutStatus;
+
   @JsonProperty("PaymentStatus")
   private OrderPaymentStatus paymentStatus;
+
   @JsonProperty("ShippingStatus")
   private OrderShippingStatus shippingStatus;
+
   @JsonProperty("CheckoutDateUtc")
   private Date checkoutDateUtc;
+
   @JsonProperty("PaymentDateUtc")
   private Date paymentDateUtc;
+
   @JsonProperty("ShippingDateUtc")
   private Date shippingDateUtc;
+
   @JsonProperty("BuyerUserId")
   private String buyerUserId;
+
   @JsonProperty("BuyerEmailAddress")
   private String buyerEmailAddress;
+
   @JsonProperty("BuyerEmailOptIn")
   private Boolean buyerEmailOptIn;
+
   @JsonProperty("OrderTaxType")
   private String orderTaxType;
+
   @JsonProperty("ShippingTaxType")
   private String shippingTaxType;
+
   @JsonProperty("GiftOptionsTaxType")
   private String giftOptionsTaxType;
+
   @JsonProperty("PaymentMethod")
   private String paymentMethod;
+
   @JsonProperty("PaymentTransactionID")
   private String paymentTransactionId;
+
   @JsonProperty("PaymentPaypalAccountID")
   private String paymentPaypalAccountId;
+
   @JsonProperty("PaymentCreditCardLast4")
   private String paymentCreditCardLast4;
+
   @JsonProperty("PaymentMerchantReferenceNumber")
   private String paymentMerchantReferenceNumber;
+
   @JsonProperty("ShippingTitle")
   private String shippingTitle;
+
   @JsonProperty("ShippingFirstName")
   private String shippingFirstName;
+
   @JsonProperty("ShippingLastName")
   private String shippingLastName;
+
   @JsonProperty("ShippingSuffix")
   private String shippingSuffix;
+
   @JsonProperty("ShippingCompanyName")
   private String shippingCompanyName;
+
   @JsonProperty("ShippingCompanyJobTitle")
   private String shippingCompanyJobTitle;
+
   @JsonProperty("ShippingDaytimePhone")
   private String shippingDaytimePhone;
+
   @JsonProperty("ShippingEveningPhone")
   private String shippingEveningPhone;
+
   @JsonProperty("ShippingAddressLine1")
   private String shippingAddressLine1;
+
   @JsonProperty("ShippingAddressLine2")
   private String shippingAddressLine2;
+
   @JsonProperty("ShippingCity")
   private String shippingCity;
+
   @JsonProperty("ShippingStateOrProvince")
   private String shippingStateOrProvince;
+
   @JsonProperty("ShippingPostalCode")
   private String shippingPostalCode;
+
   @JsonProperty("ShippingCountry")
   private String shippingCountry;
+
   @JsonProperty("BillingTitle")
   private String billingTitle;
+
   @JsonProperty("BillingFirstName")
   private String billingFirstName;
+
   @JsonProperty("BillingLastName")
   private String billingLastName;
+
   @JsonProperty("BillingSuffix")
   private String billingSuffix;
+
   @JsonProperty("BillingCompanyName")
   private String billingCompanyName;
+
   @JsonProperty("BillingCompanyJobTitle")
   private String billingCompanyJobTitle;
+
   @JsonProperty("BillingDaytimePhone")
   private String billingDaytimePhone;
+
   @JsonProperty("BillingEveningPhone")
   private String billingEveningPhone;
+
   @JsonProperty("BillingAddressLine1")
   private String billingAddressLine1;
+
   @JsonProperty("BillingAddressLine2")
   private String billingAddressLine2;
+
   @JsonProperty("BillingCity")
   private String billingCity;
+
   @JsonProperty("BillingStateOrProvince")
   private String billingStateOrProvince;
+
   @JsonProperty("BillingPostalCode")
   private String billingPostalCode;
+
   @JsonProperty("BillingCountry")
   private String billingCountry;
+
   @JsonProperty("PromotionCode")
   private String promotionCode;
+
   @JsonProperty("PromotionAmount")
   private BigDecimal promotionAmount;
+
   @JsonProperty("Items")
   private List<com.symphonycommerce.deejay.skubana.model.OrderLineItem> items;
+
   @JsonProperty("Fulfillments")
   private List<Shipment> fulfillments;
 
@@ -367,7 +424,6 @@ public class Order implements OrderEntity {
     return paymentTransactionId;
   }
 
-
   public String getPaymentCreditCardLast4() {
     return paymentCreditCardLast4;
   }
@@ -527,11 +583,14 @@ public class Order implements OrderEntity {
 
   @Override
   public ShippingClass getShippingClass(Optional<String> warehouseId) {
-    FulfillmentEntity shipment = getFulfillments().stream().filter(s -> warehouseId.get()
-        .equalsIgnoreCase(
-        s.getDistributionCenterId())).findFirst().get();
+    FulfillmentEntity shipment =
+        getFulfillments()
+            .stream()
+            .filter(s -> warehouseId.get().equalsIgnoreCase(s.getDistributionCenterId()))
+            .findFirst()
+            .get();
 
-    //see http://ssc.channeladvisor.com/howto/marketplaces-shipping-carrier-class-code-table
+    // see http://ssc.channeladvisor.com/howto/marketplaces-shipping-carrier-class-code-table
 
     // This can happen for some orders where the user doesn't care what the shipping class is
     // in that case we'll just go for the slow and cheap "Ground"
@@ -578,5 +637,22 @@ public class Order implements OrderEntity {
         .add("siteName", siteName)
         .add("siteOrderID", siteOrderId)
         .toString();
+  }
+
+  enum OrderShippingStatus {
+    Unshipped,
+    Shipped,
+    PartiallyShipped,
+    PendingShipment,
+    Canceled,
+    ThirdPartyManaged
+  }
+
+  enum OrderPaymentStatus {
+    NotYetSubmitted,
+    Cleared,
+    Submitted,
+    Failed,
+    Deposited
   }
 }

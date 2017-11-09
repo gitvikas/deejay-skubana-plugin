@@ -22,27 +22,25 @@ public class Shipment implements FulfillmentEntity {
     Courier
   }
 
-  public Shipment() {
-  }
+  public Shipment() {}
 
-  /**
-   * Constructor.
-   */
+  /** Constructor. */
   public Shipment(FulfillmentEntity entity) {
     this.trackingNumber = entity.getTrackingNumber();
     this.shippingCarrier = entity.getShippingCarrier();
     this.shippingClass = entity.getShippingClass();
     this.deliveryStatus = entity.getDeliveryStatus();
     this.distributionCenterId = entity.getDistributionCenterId();
-    this.items = entity
-        .getItems()
-        .stream()
-        .map(x-> com.symphonycommerce.deejay.skubana.model
-            .ShipmentItem.createShipmentItemWithProductId(x.getProductId(),
-        x.getQuantity()))
-        .collect(Collectors.toList());
+    this.items =
+        entity
+            .getItems()
+            .stream()
+            .map(
+                x ->
+                    com.symphonycommerce.deejay.skubana.model.ShipmentItem
+                        .createShipmentItemWithProductId(x.getProductId(), x.getQuantity()))
+            .collect(Collectors.toList());
   }
-
 
   // Available, but unused by us..
 
@@ -62,7 +60,8 @@ public class Shipment implements FulfillmentEntity {
 
   private String shippingCarrier; // FEDEX, UPS, USPS
 
-  private String shippingClass; //TODO:  Shipping Method conversion needs to happen here: http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
+  private String shippingClass; // TODO:  Shipping Method conversion needs to happen here:
+  // http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
 
   // Sent only for partial shipments..
   private List<com.symphonycommerce.deejay.skubana.model.ShipmentItem> items;

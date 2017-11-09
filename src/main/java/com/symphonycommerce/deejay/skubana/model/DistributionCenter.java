@@ -1,20 +1,11 @@
 package com.symphonycommerce.deejay.skubana.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.symphonycommerce.deejay.ecommerce.entities.DistributionCenterEntity;
-import com.symphonycommerce.deejay.ecommerce.entities.Entity;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DistributionCenter implements DistributionCenterEntity {
-
-  enum DcType {
-    Warehouse,
-    ExternallyManaged,
-    DropShip,
-    RetailStore
-  }
 
   private Integer id;
   private String name;
@@ -31,9 +22,17 @@ public class DistributionCenter implements DistributionCenterEntity {
     return id;
   }
 
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
   @JsonProperty("Name")
   public String getName() {
     return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   @JsonProperty("Code")
@@ -41,24 +40,23 @@ public class DistributionCenter implements DistributionCenterEntity {
     return code;
   }
 
+  public void setCode(String code) {
+    this.code = code;
+  }
+
   @JsonProperty("Type")
   public DcType getType() {
     return type;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public void setCode(String code) {
-    this.code = code;
-  }
-
   public void setType(DcType type) {
     this.type = type;
+  }
+
+  enum DcType {
+    Warehouse,
+    ExternallyManaged,
+    DropShip,
+    RetailStore
   }
 }

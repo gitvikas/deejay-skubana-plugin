@@ -15,13 +15,13 @@ public class DcQuantity {
     return distributionCenterId;
   }
 
+  public void setDistributionCenterId(Integer distributionCenterId) {
+    this.distributionCenterId = distributionCenterId;
+  }
+
   @JsonProperty("AvailableQuantity")
   public Integer getAvailableQuantity() {
     return availableQuantity;
-  }
-
-  public void setDistributionCenterId(Integer distributionCenterId) {
-    this.distributionCenterId = distributionCenterId;
   }
 
   public void setAvailableQuantity(Integer availableQuantity) {
@@ -30,8 +30,9 @@ public class DcQuantity {
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this).add("distributionCenterId", distributionCenterId).add(
-        "availableQuantity",
-        availableQuantity).toString();
+    return MoreObjects.toStringHelper(this)
+        .add("distributionCenterId", distributionCenterId)
+        .add("availableQuantity", availableQuantity)
+        .toString();
   }
 }

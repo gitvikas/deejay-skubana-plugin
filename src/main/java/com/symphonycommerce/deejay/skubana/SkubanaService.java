@@ -14,8 +14,7 @@ public class SkubanaService implements EcommerceService {
   private final EcommerceConnection connection;
   private final SkubanaLiveConfig config;
 
-  public SkubanaService(SkubanaConnection connection,
-                        SkubanaLiveConfig config) {
+  public SkubanaService(SkubanaConnection connection, SkubanaLiveConfig config) {
     this.connection = connection;
     this.config = config;
   }
@@ -42,15 +41,12 @@ public class SkubanaService implements EcommerceService {
   }
 
   @Override
-  public void setupNewBrand(String name, String apiKey) {
-
-  }
+  public void setupNewBrand(String name, String apiKey) {}
 
   @Override
   public EcommerceController getController() {
     return null;
   }
-
 
   @Override
   public EcommerceConnection getConnection() {

@@ -10,13 +10,18 @@ import com.symphonycommerce.deejay.ecommerce.entities.OrderEntity;
 public class OrderItemAdjustment implements OrderEntity.OrderLineItem.Adjustment {
 
   // not all of the fields, just the ones we  use
-  // see more here: https://developer.channeladvisor.com/working-with-orders/order-entities#OrderEntities-OrderAdjustment
+  // see more here:
+  // https://developer.channeladvisor.com/working-with-orders/order-entities#OrderEntities-OrderAdjustment
 
-  /**
-   * A factory method for making a simple cancellation request with a reason.
-   */
-  public static OrderItemAdjustment makeCancellation(int qty, AdjustmentReason reason, String
-      sellerAdjustmentId) {
+  private String sellerAdjustmentId;
+  private Integer quantity;
+  private Boolean isRestock;
+  private AdjustmentReason reason;
+  private AdjustmentType type;
+
+  /** A factory method for making a simple cancellation request with a reason. */
+  public static OrderItemAdjustment makeCancellation(
+      int qty, AdjustmentReason reason, String sellerAdjustmentId) {
     OrderItemAdjustment adjustment = new OrderItemAdjustment();
     adjustment.quantity = qty;
     adjustment.reason = reason;
@@ -24,23 +29,55 @@ public class OrderItemAdjustment implements OrderEntity.OrderLineItem.Adjustment
     return adjustment;
   }
 
-  /**
-   * A factory method for maknig a simple cancellation request.
-   */
-  public static OrderItemAdjustment makeCancellation(int qty, String
-      sellerAdjustmentId) {
+  /** A factory method for maknig a simple cancellation request. */
+  public static OrderItemAdjustment makeCancellation(int qty, String sellerAdjustmentId) {
     return makeCancellation(qty, AdjustmentReason.GeneralAdjustment, sellerAdjustmentId);
   }
 
-  private String sellerAdjustmentId;
+  @JsonProperty("Quantity")
+  public int getQuantity() {
+    return quantity;
+  }
 
-  private Integer quantity;
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
 
-  private Boolean isRestock;
+  @JsonProperty("isRestock")
+  public Boolean isRestock() {
+    return isRestock;
+  }
 
-  private AdjustmentReason reason;
+  @JsonProperty("Reason")
+  public AdjustmentReason getReason() {
+    return reason;
+  }
 
-  private AdjustmentType type;
+  public void setReason(AdjustmentReason reason) {
+    this.reason = reason;
+  }
+
+  @JsonProperty("Type")
+  public AdjustmentType getType() {
+    return type;
+  }
+
+  public void setType(AdjustmentType type) {
+    this.type = type;
+  }
+
+  @JsonProperty("SellerAdjustmentID")
+  public String getSellerAdjustmentId() {
+    return sellerAdjustmentId;
+  }
+
+  public void setSellerAdjustmentId(String sellerAdjustmentId) {
+    this.sellerAdjustmentId = sellerAdjustmentId;
+  }
+
+  public void setRestock(Boolean restock) {
+    isRestock = restock;
+  }
 
   enum AdjustmentType {
     Refund,
@@ -58,50 +95,5 @@ public class OrderItemAdjustment implements OrderEntity.OrderLineItem.Adjustment
     CustomerExchange,
     MerchandiseNotReceived,
     ShippingAddressUndeliverable
-  }
-
-  @JsonProperty("Quantity")
-  public int getQuantity() {
-    return quantity;
-  }
-
-  @JsonProperty("isRestock")
-  public Boolean isRestock() {
-    return isRestock;
-  }
-
-  @JsonProperty("Reason")
-  public AdjustmentReason getReason() {
-    return reason;
-  }
-
-  @JsonProperty("Type")
-  public AdjustmentType getType() {
-    return type;
-  }
-
-  @JsonProperty("SellerAdjustmentID")
-  public String getSellerAdjustmentId() {
-    return sellerAdjustmentId;
-  }
-
-  public void setSellerAdjustmentId(String sellerAdjustmentId) {
-    this.sellerAdjustmentId = sellerAdjustmentId;
-  }
-
-  public void setQuantity(int quantity) {
-    this.quantity = quantity;
-  }
-
-  public void setRestock(Boolean restock) {
-    isRestock = restock;
-  }
-
-  public void setReason(AdjustmentReason reason) {
-    this.reason = reason;
-  }
-
-  public void setType(AdjustmentType type) {
-    this.type = type;
   }
 }

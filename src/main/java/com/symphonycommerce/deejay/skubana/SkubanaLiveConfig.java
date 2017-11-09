@@ -35,19 +35,18 @@ public class SkubanaLiveConfig extends DeejayLiveConfig {
     return appId;
   }
 
+  public void setAppId(String appId) {
+    this.appId = appId;
+  }
+
   @DynamoDBAttribute(attributeName = "sharedSecret")
   public String getSharedSecret() {
     return sharedSecret;
   }
 
-  public void setAppId(String appId) {
-    this.appId = appId;
-  }
-
   public void setSharedSecret(String sharedSecret) {
     this.sharedSecret = sharedSecret;
   }
-
 
   @Override
   public boolean equals(Object obj) {

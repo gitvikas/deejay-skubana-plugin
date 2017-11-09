@@ -11,17 +11,14 @@ import com.symphonycommerce.deejay.ecommerce.entities.FulfillmentEntity;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ShipmentItem implements FulfillmentEntity.ShipmentItem {
 
-  public ShipmentItem() {
-  }
+  public ShipmentItem() {}
 
   private String productId;
   private String sku;
   private String lineItemId; // not used by CA
   private int quantity;
 
-  /**
-   * Factory method for creating products with product ID.
-   */
+  /** Factory method for creating products with product ID. */
   public static ShipmentItem createShipmentItemWithProductId(String productId, int quantity) {
     ShipmentItem si = new ShipmentItem();
     si.productId = productId;

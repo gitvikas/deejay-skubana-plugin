@@ -16,9 +16,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Product implements Entity, ProductEntity {
 
-  /**
-   * GLOBAL REQUIRED.
-   */
+  /** GLOBAL REQUIRED. */
   @JsonProperty("ID")
   Integer id;
 
@@ -34,20 +32,13 @@ public class Product implements Entity, ProductEntity {
   @JsonProperty("UpdateDateUtc")
   Date updateDateUtc;
 
-  /**
-   * Identifies the Skubana account.
-   */
+  /** Identifies the Skubana account. */
   @JsonProperty("ProfileID")
   Integer profileId;
 
+  /** FULFILLMENT PROPERTIES. */
 
-  /**
-   * FULFILLMENT PROPERTIES.
-   */
-
-  /**
-   * Default unit in US profiles is "Inches". All other locales are "Centimeters".
-   */
+  /** Default unit in US profiles is "Inches". All other locales are "Centimeters". */
   @JsonProperty("Height")
   BigDecimal height;
 
@@ -57,9 +48,7 @@ public class Product implements Entity, ProductEntity {
   @JsonProperty("Width")
   BigDecimal width;
 
-  /**
-   * Default unit in US profiles is "Pounds". All other locales are "Kilograms".
-   */
+  /** Default unit in US profiles is "Pounds". All other locales are "Kilograms". */
   @JsonProperty("Weight")
   BigDecimal weight;
 
@@ -69,20 +58,14 @@ public class Product implements Entity, ProductEntity {
   @JsonProperty("UPC")
   String upc;
 
-  /**
-   * Tax product code for this item (for reseller use, NOT sales tax).
-   */
+  /** Tax product code for this item (for reseller use, NOT sales tax). */
   @JsonProperty("TaxProductCode")
   String taxProductCode;
 
   @JsonProperty("DCQuantities")
   List<DcQuantity> dcQuantities;
 
-
-  /**
-   * PRICING.
-   */
-
+  /** PRICING. */
 
   /**
    * The cost of the product to the seller. This can be the product acquisition cost or the
@@ -94,9 +77,7 @@ public class Product implements Entity, ProductEntity {
   @JsonProperty("Margin")
   BigDecimal margin;
 
-  /**
-   * The price at which an item sells in normal retail channels.
-   */
+  /** The price at which an item sells in normal retail channels. */
   @JsonProperty("RetailPrice")
   BigDecimal retailPrice;
 
@@ -121,7 +102,6 @@ public class Product implements Entity, ProductEntity {
   @JsonProperty("BuyItNowPrice")
   BigDecimal buyItNowPrice;
 
-
   /**
    * The Second Chance Offer Price field will be used when the Automatic Second Chance Offer feature
    * is enabled in the Sales Settings.
@@ -144,9 +124,7 @@ public class Product implements Entity, ProductEntity {
   @JsonProperty("BundleType")
   String bundleType;
 
-  /**
-   * QUANTITY PROPERTIES.
-   */
+  /** QUANTITY PROPERTIES. */
   @JsonProperty("QuantityUpdateDateUtc")
   Date quantityUpdateDateUtc;
 
@@ -160,33 +138,21 @@ public class Product implements Entity, ProductEntity {
    */
   @JsonProperty("TotalAvailableQuantity")
   Integer totalAvailableQuantity;
-  /**
-   * The allocated quantity from open listings across all marketplaces for this item.
-   */
+  /** The allocated quantity from open listings across all marketplaces for this item. */
   @JsonProperty("OpenAllocatedQuantity")
   Integer openAllocatedQuantity;
 
-
-  /**
-   * The quantity that has closed as a successful sale, but is still awaiting buyer checkout.
-   */
+  /** The quantity that has closed as a successful sale, but is still awaiting buyer checkout. */
   @JsonProperty("PendingCheckoutQuantity")
   Integer pendingCheckoutQuantity;
 
-
-  /**
-   * The quantity for which the buyer has completed checkout but payment has not been received.
-   */
+  /** The quantity for which the buyer has completed checkout but payment has not been received. */
   @JsonProperty("PendingPaymentQuantity")
   Integer pendingPaymentQuantity;
 
-
-  /**
-   * The quantity paid for but pending shipment to the buyer.
-   */
+  /** The quantity paid for but pending shipment to the buyer. */
   @JsonProperty("PendingShipmentQuantity")
   Integer pendingShipmentQuantity;
-
 
   /**
    * The quantity on hand in the warehouse or the quantity in stock and available to be posted to
@@ -231,10 +197,7 @@ public class Product implements Entity, ProductEntity {
   @JsonProperty("TotalQuantityPooled")
   Integer totalQuantityPooled;
 
-
-  /**
-   *  VARIANTS.
-   */
+  /** VARIANTS. */
 
   /**
    * A simple boolean to indicate if this is a parent product (one that contains variants) or a leaf
@@ -243,9 +206,7 @@ public class Product implements Entity, ProductEntity {
   @JsonProperty("IsParent")
   boolean isParent;
 
-  /**
-   * This value is true if the parent has children.
-   */
+  /** This value is true if the parent has children. */
   @JsonProperty("IsInRelationship")
   boolean isInRelationship;
 
@@ -256,25 +217,15 @@ public class Product implements Entity, ProductEntity {
   @JsonProperty("ParentProductID")
   Long parentProductId;
 
-
-  /**
-   * Attribute name used, only available if this is a parent product.
-   */
+  /** Attribute name used, only available if this is a parent product. */
   @JsonProperty("RelationshipName")
   String relationshipName;
 
-
-  /**
-   * MISC STUFF WE DON'T USE.
-   */
-
-
+  /** MISC STUFF WE DON'T USE. */
   @JsonProperty("IsBlocked")
   boolean isBlocked;
 
-  /**
-   * If true, will prevent listing and fulfillment from Externally-Managed DCs.
-   */
+  /** If true, will prevent listing and fulfillment from Externally-Managed DCs. */
   @JsonProperty("IsExternalQuantityBlocked")
   boolean isExternalQuantityBlocked;
 
@@ -329,9 +280,7 @@ public class Product implements Entity, ProductEntity {
   @JsonProperty("Warranty")
   String warranty;
 
-  /**
-   * DEPRECATED BY CA.
-   */
+  /** DEPRECATED BY CA. */
   @JsonProperty("IsDisplayInStore")
   @Deprecated
   boolean isDisplayInStore;
@@ -624,10 +573,13 @@ public class Product implements Entity, ProductEntity {
     return dcQuantities;
   }
 
-
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this).add("id", id).add("sku", sku)
-        .add("title", title).add("quantities", dcQuantities).toString();
+    return MoreObjects.toStringHelper(this)
+        .add("id", id)
+        .add("sku", sku)
+        .add("title", title)
+        .add("quantities", dcQuantities)
+        .toString();
   }
 }

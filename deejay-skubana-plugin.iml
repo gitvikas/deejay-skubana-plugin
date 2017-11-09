@@ -150,8 +150,4 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.4" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.5.4" level="project" />
   </component>
-  <component name="sonarModuleSettings">
-    <option name="localAnalysisScripName" value="&lt;PROJECT&gt;" />
-    <option name="serverName" value="&lt;PROJECT&gt;" />
-  </component>
 </module>

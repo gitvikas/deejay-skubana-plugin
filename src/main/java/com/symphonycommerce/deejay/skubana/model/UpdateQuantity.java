@@ -13,7 +13,6 @@ import java.util.Optional;
 // .com/working-with-products/quantity/update-quantity-choose-update-type-single-dc-update
 public class UpdateQuantity {
 
-
   public enum QuantityUpdateType {
     Absolute,
     Relative,
@@ -22,29 +21,26 @@ public class UpdateQuantity {
     UnShipped
   }
 
-  public UpdateQuantity() {
-  }
+  public UpdateQuantity() {}
 
   public UpdateQuantity(QuantityUpdateType updateType, List<WarehouseQuantity> updates) {
     this.updateType = updateType;
     this.updates = updates;
   }
 
-  /**
-   * Make an inventory update.
-   */
-  public static UpdateQuantity makeInventoryUpdate(Optional<String> distributionCenterId, int
-      availableQuantity) {
+  /** Make an inventory update. */
+  public static UpdateQuantity makeInventoryUpdate(
+      Optional<String> distributionCenterId, int availableQuantity) {
     UpdateQuantity uq = new UpdateQuantity();
     uq.setUpdateType(QuantityUpdateType.InStock);
-    uq.updates = ImmutableList.of(new WarehouseQuantity(distributionCenterId.orElse(null),
-                                                        availableQuantity));
+    uq.updates =
+        ImmutableList.of(
+            new WarehouseQuantity(distributionCenterId.orElse(null), availableQuantity));
     return uq;
   }
 
   private QuantityUpdateType updateType;
   private List<WarehouseQuantity> updates;
-
 
   @JsonProperty("UpdateType")
   public QuantityUpdateType getUpdateType() {

@@ -33,8 +33,7 @@ public class OrderLineItem implements OrderEntity.OrderLineItem {
   private String itemUrl;
   private List<OrderItemAdjustment> adjustments;
 
-  public OrderLineItem() {
-  }
+  public OrderLineItem() {}
 
   @Override
   public String getIdString() {

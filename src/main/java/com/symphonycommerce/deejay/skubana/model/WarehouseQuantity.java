@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class WarehouseQuantity {
 
+  private String distributionCenterId;
+  private int quantity;
+
   public WarehouseQuantity(String distributionCenterId, int quantity) {
     this.distributionCenterId = distributionCenterId;
     this.quantity = quantity;
   }
-
-  private String distributionCenterId;
-  private int quantity;
 
   @JsonProperty("DistributionCenterID")
   public String getDistributionCenterId() {

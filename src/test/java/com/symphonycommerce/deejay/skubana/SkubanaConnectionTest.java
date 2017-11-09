@@ -1,13 +1,12 @@
 package com.symphonycommerce.deejay.skubana;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.symphonycommerce.deejay.skubana.connector.ConnectionProvider;
 import com.symphonycommerce.deejay.ecommerce.ConnectionIntegrationTest;
 import com.symphonycommerce.deejay.ecommerce.EcommConnectionTestHelpers;
 import com.symphonycommerce.deejay.ecommerce.EcommerceConnection;
 import com.symphonycommerce.deejay.ecommerce.entities.OrderEntity;
-
 import com.symphonycommerce.deejay.ecommerce.entities.ProductEntity;
+import com.symphonycommerce.deejay.skubana.connector.ConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
@@ -17,10 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class SkubanaConnectionTest implements ConnectionIntegrationTest {
-  private static final Logger LOG = LoggerFactory.getLogger(
-          SkubanaConnectionTest.class.getName());
+  private static final Logger LOG = LoggerFactory.getLogger(SkubanaConnectionTest.class.getName());
 
   EcommerceConnection connection;
 
@@ -30,15 +27,14 @@ public class SkubanaConnectionTest implements ConnectionIntegrationTest {
     refreshTokens.put("testBrand", "ZVHLQGL0SZ0KjKVgGnf_1TZIReoV5P8tnq-BhuDwTNE");
     refreshTokens.put("botoys", "ECA-_z5oXj4n1jwo_7EIpMrIneFltFrSCaZI-AMfYqk");
     refreshTokens.put("grivitz", "2FxRTntXfz_dQ1MOcA4Ux4trnbAxUz7i0haIu4xJUno");
-    ChannelAdvisorLiveConfig liveConfig = new ChannelAdvisorLiveConfig();
+    SkubanaLiveConfig liveConfig = new SkubanaLiveConfig();
     liveConfig.setAppId("0lhvroo4vhajixeb7s70sje1kv3ejkid");
     liveConfig.setSharedSecret("8RMl8GjyYUSLQHG-Nz8ozw");
     liveConfig.setBrandToRefreshToken(refreshTokens);
 
     ConnectionProvider provider = new ConnectionProvider(liveConfig);
-    connection = new ChannelAdvisorConnection(provider);
+    connection = new SkubanaConnection(provider);
   }
-
 
   @Override
   @Test(enabled = false)
@@ -62,30 +58,19 @@ public class SkubanaConnectionTest implements ConnectionIntegrationTest {
   }
 
   @Override
-  public void testShouldBeAbleToAckAnOrder() throws Exception {
-
-  }
+  public void testShouldBeAbleToAckAnOrder() throws Exception {}
 
   @Override
-  public void testShouldBeAbleToUpdateInventory() throws Exception {
-
-  }
+  public void testShouldBeAbleToUpdateInventory() throws Exception {}
 
   @Override
-  public void testShouldBeAbleToCancelAnOrder() throws Exception {
-
-  }
+  public void testShouldBeAbleToCancelAnOrder() throws Exception {}
 
   @Override
-  public void testShouldBeAbleToShipOrder() {
-
-  }
-
+  public void testShouldBeAbleToShipOrder() {}
 
   @Override
-  public void testNewOrderShouldHaveRequiredFulfillmentFields() throws Exception {
-
-  }
+  public void testNewOrderShouldHaveRequiredFulfillmentFields() throws Exception {}
 
   @Override
   public EcommerceConnection getConnection() {
@@ -96,5 +81,4 @@ public class SkubanaConnectionTest implements ConnectionIntegrationTest {
   public String getBrand() {
     return "testBrand";
   }
-
 }

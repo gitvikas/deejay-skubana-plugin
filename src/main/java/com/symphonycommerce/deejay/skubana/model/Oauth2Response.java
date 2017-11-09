@@ -2,7 +2,6 @@ package com.symphonycommerce.deejay.skubana.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 public class Oauth2Response {
 
   @JsonProperty("access_token")
@@ -17,9 +16,14 @@ public class Oauth2Response {
   @Override
   public String toString() {
     return "Oauth2Response{"
-        + "accessToken='" + accessToken + '\''
-        + ", tokenType='" + tokenType + '\''
-        + ", expiresInMs=" + expiresInSeconds
+        + "accessToken='"
+        + accessToken
+        + '\''
+        + ", tokenType='"
+        + tokenType
+        + '\''
+        + ", expiresInMs="
+        + expiresInSeconds
         + '}';
   }
 
