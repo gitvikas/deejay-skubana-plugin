@@ -1,4 +1,4 @@
-package com.symphonycommerce.deejay.channeladvisor;
+package com.symphonycommerce.deejay.skubana;
 
 import com.google.common.collect.ImmutableMap;
 

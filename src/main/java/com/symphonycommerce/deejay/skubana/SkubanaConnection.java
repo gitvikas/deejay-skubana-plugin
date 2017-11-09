@@ -1,4 +1,4 @@
-package com.symphonycommerce.deejay.channeladvisor;
+package com.symphonycommerce.deejay.skubana;
 
 import com.google.common.base.Preconditions;
 import com.google.common.cache.CacheBuilder;
@@ -6,15 +6,15 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 
-import com.symphonycommerce.deejay.channeladvisor.connector.ApiListWrapper;
-import com.symphonycommerce.deejay.channeladvisor.connector.ApiPost;
-import com.symphonycommerce.deejay.channeladvisor.connector.ConnectionProvider;
-import com.symphonycommerce.deejay.channeladvisor.model.DistributionCenter;
-import com.symphonycommerce.deejay.channeladvisor.model.Order;
-import com.symphonycommerce.deejay.channeladvisor.model.OrderItemAdjustment;
-import com.symphonycommerce.deejay.channeladvisor.model.Product;
-import com.symphonycommerce.deejay.channeladvisor.model.Shipment;
-import com.symphonycommerce.deejay.channeladvisor.model.UpdateQuantity;
+import com.symphonycommerce.deejay.skubana.connector.ApiListWrapper;
+import com.symphonycommerce.deejay.skubana.connector.ApiPost;
+import com.symphonycommerce.deejay.skubana.connector.ConnectionProvider;
+import com.symphonycommerce.deejay.skubana.model.DistributionCenter;
+import com.symphonycommerce.deejay.skubana.model.Order;
+import com.symphonycommerce.deejay.skubana.model.OrderItemAdjustment;
+import com.symphonycommerce.deejay.skubana.model.Product;
+import com.symphonycommerce.deejay.skubana.model.Shipment;
+import com.symphonycommerce.deejay.skubana.model.UpdateQuantity;
 import com.symphonycommerce.deejay.config.ConfigurableConnection;
 import com.symphonycommerce.deejay.ecommerce.EcommerceConnection;
 import com.symphonycommerce.deejay.ecommerce.entities.FulfillmentEntity;
@@ -37,9 +37,9 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 
-public class ChannelAdvisorConnection implements ConfigurableConnection, EcommerceConnection {
+public class SkubanaConnection implements ConfigurableConnection, EcommerceConnection {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ChannelAdvisorConnection.class
+  private static final Logger LOG = LoggerFactory.getLogger(SkubanaConnection.class
                                                                 .getName());
 
   public static final String DISTRIBUTION_CENTER_ID = "SYMPHONY";
@@ -56,7 +56,7 @@ public class ChannelAdvisorConnection implements ConfigurableConnection, Ecommer
           new CacheLoader<String, Integer>() {
             public Integer load(String key) {
               DistributionCenter dc = findSymphonyDc(key);
-              LOG.info("ChannelAdvisorConnection - get DC ID for {}: {}", key, dc);
+              LOG.info("SkubanaConnection - get DC ID for {}: {}", key, dc);
               return dc.getId();
             }
           });
@@ -64,7 +64,7 @@ public class ChannelAdvisorConnection implements ConfigurableConnection, Ecommer
 
   private final ConnectionProvider provider;
 
-  public ChannelAdvisorConnection(ConnectionProvider provider) {
+  public SkubanaConnection(ConnectionProvider provider) {
     this.provider = provider;
   }
 

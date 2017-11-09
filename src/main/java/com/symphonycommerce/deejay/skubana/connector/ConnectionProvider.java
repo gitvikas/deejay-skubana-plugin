@@ -1,9 +1,9 @@
-package com.symphonycommerce.deejay.channeladvisor.connector;
+package com.symphonycommerce.deejay.skubana.connector;
 
 import com.google.common.collect.Maps;
 
-import com.symphonycommerce.deejay.channeladvisor.ChannelAdvisorLiveConfig;
-import com.symphonycommerce.deejay.channeladvisor.model.Oauth2Response;
+import com.symphonycommerce.deejay.skubana.SkubanaLiveConfig;
+import com.symphonycommerce.deejay.skubana.model.Oauth2Response;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -27,7 +27,7 @@ public class ConnectionProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(ConnectionProvider.class.getName());
 
-  private final ChannelAdvisorLiveConfig config;
+  private final SkubanaLiveConfig config;
   private final Client client;
   private final WebTarget rootTarget;
   private final Map<String, OAuthToken> brandToAuthToken;
@@ -37,7 +37,7 @@ public class ConnectionProvider {
    * Creates a connection provider using a configuration that has been loaded
    * from the databse.
    */
-  public ConnectionProvider(ChannelAdvisorLiveConfig liveConfig) {
+  public ConnectionProvider(SkubanaLiveConfig liveConfig) {
     this.config = liveConfig;
 
     this.brandToAuthToken = Maps.newHashMap();
@@ -59,7 +59,7 @@ public class ConnectionProvider {
     this.rootTarget = client.target("https://api.channeladvisor.com");
   }
 
-  public ChannelAdvisorLiveConfig getLiveConfig() {
+  public SkubanaLiveConfig getLiveConfig() {
     return config;
   }
 

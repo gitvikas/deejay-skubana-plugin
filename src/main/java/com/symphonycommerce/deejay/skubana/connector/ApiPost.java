@@ -1,4 +1,4 @@
-package com.symphonycommerce.deejay.channeladvisor.connector;
+package com.symphonycommerce.deejay.skubana.connector;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

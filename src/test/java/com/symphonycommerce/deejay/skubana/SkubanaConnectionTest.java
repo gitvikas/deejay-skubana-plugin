@@ -1,7 +1,7 @@
-package com.symphonycommerce.deejay.channeladvisor;
+package com.symphonycommerce.deejay.skubana;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.symphonycommerce.deejay.channeladvisor.connector.ConnectionProvider;
+import com.symphonycommerce.deejay.skubana.connector.ConnectionProvider;
 import com.symphonycommerce.deejay.ecommerce.ConnectionIntegrationTest;
 import com.symphonycommerce.deejay.ecommerce.EcommConnectionTestHelpers;
 import com.symphonycommerce.deejay.ecommerce.EcommerceConnection;
@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ChannelAdvisorConnectionTest implements ConnectionIntegrationTest {
+public class SkubanaConnectionTest implements ConnectionIntegrationTest {
   private static final Logger LOG = LoggerFactory.getLogger(
-      ChannelAdvisorConnectionTest.class.getName());
+          SkubanaConnectionTest.class.getName());
 
   EcommerceConnection connection;
 

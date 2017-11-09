@@ -1,4 +1,4 @@
-package com.symphonycommerce.deejay.channeladvisor.model;
+package com.symphonycommerce.deejay.skubana.model;
 
 import com.google.common.base.MoreObjects;
 
@@ -37,7 +37,7 @@ public class Shipment implements FulfillmentEntity {
     this.items = entity
         .getItems()
         .stream()
-        .map(x-> com.symphonycommerce.deejay.channeladvisor.model
+        .map(x-> com.symphonycommerce.deejay.skubana.model
             .ShipmentItem.createShipmentItemWithProductId(x.getProductId(),
         x.getQuantity()))
         .collect(Collectors.toList());
@@ -65,10 +65,10 @@ public class Shipment implements FulfillmentEntity {
   private String shippingClass; //TODO:  Shipping Method conversion needs to happen here: http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
 
   // Sent only for partial shipments..
-  private List<com.symphonycommerce.deejay.channeladvisor.model.ShipmentItem> items;
+  private List<com.symphonycommerce.deejay.skubana.model.ShipmentItem> items;
 
   @JsonProperty(value = "Items", required = true)
-  public List<com.symphonycommerce.deejay.channeladvisor.model.ShipmentItem> getItems() {
+  public List<com.symphonycommerce.deejay.skubana.model.ShipmentItem> getItems() {
     return items;
   }
 
@@ -144,7 +144,7 @@ public class Shipment implements FulfillmentEntity {
     this.shippingClass = shippingClass;
   }
 
-  public void setItems(List<com.symphonycommerce.deejay.channeladvisor.model.ShipmentItem> items) {
+  public void setItems(List<com.symphonycommerce.deejay.skubana.model.ShipmentItem> items) {
     this.items = items;
   }
 

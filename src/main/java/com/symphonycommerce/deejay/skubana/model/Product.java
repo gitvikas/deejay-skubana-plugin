@@ -1,4 +1,4 @@
-package com.symphonycommerce.deejay.channeladvisor.model;
+package com.symphonycommerce.deejay.skubana.model;
 
 import com.google.common.base.MoreObjects;
 
@@ -35,7 +35,7 @@ public class Product implements Entity, ProductEntity {
   Date updateDateUtc;
 
   /**
-   * Identifies the ChannelAdvisor account.
+   * Identifies the Skubana account.
    */
   @JsonProperty("ProfileID")
   Integer profileId;

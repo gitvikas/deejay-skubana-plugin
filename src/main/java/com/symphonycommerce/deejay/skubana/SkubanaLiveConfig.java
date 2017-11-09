@@ -1,4 +1,4 @@
-package com.symphonycommerce.deejay.channeladvisor;
+package com.symphonycommerce.deejay.skubana;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @DynamoDBTable(tableName = "Deejay.Config")
-public class ChannelAdvisorLiveConfig extends DeejayLiveConfig {
+public class SkubanaLiveConfig extends DeejayLiveConfig {
 
   private String appId;
   private String sharedSecret;
@@ -57,7 +57,7 @@ public class ChannelAdvisorLiveConfig extends DeejayLiveConfig {
     if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
-    ChannelAdvisorLiveConfig that = (ChannelAdvisorLiveConfig) obj;
+    SkubanaLiveConfig that = (SkubanaLiveConfig) obj;
     return Objects.equals(appId, that.appId)
         && Objects.equals(sharedSecret, that.sharedSecret)
         && Objects.equals(brandToRefreshToken, that.brandToRefreshToken);

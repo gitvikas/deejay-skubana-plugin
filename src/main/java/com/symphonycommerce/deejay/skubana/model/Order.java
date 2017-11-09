@@ -1,4 +1,4 @@
-package com.symphonycommerce.deejay.channeladvisor.model;
+package com.symphonycommerce.deejay.skubana.model;
 
 
 import com.google.common.base.MoreObjects;
@@ -194,7 +194,7 @@ public class Order implements OrderEntity {
   @JsonProperty("PromotionAmount")
   private BigDecimal promotionAmount;
   @JsonProperty("Items")
-  private List<com.symphonycommerce.deejay.channeladvisor.model.OrderLineItem> items;
+  private List<com.symphonycommerce.deejay.skubana.model.OrderLineItem> items;
   @JsonProperty("Fulfillments")
   private List<Shipment> fulfillments;
 
@@ -513,7 +513,7 @@ public class Order implements OrderEntity {
     return promotionCode;
   }
 
-  public List<com.symphonycommerce.deejay.channeladvisor.model.OrderLineItem> getItems() {
+  public List<com.symphonycommerce.deejay.skubana.model.OrderLineItem> getItems() {
     return items;
   }
 

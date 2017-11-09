@@ -1,4 +1,4 @@
-package com.symphonycommerce.deejay.channeladvisor;
+package com.symphonycommerce.deejay.skubana;
 
 import com.symphonycommerce.deejay.ecommerce.EcommerceConnection;
 import com.symphonycommerce.deejay.ecommerce.EcommerceController;
@@ -9,13 +9,13 @@ import com.symphonycommerce.deejay.ecommerce.SimpleRegistrar;
 
 import java.util.Set;
 
-public class ChannelAdvisorService implements EcommerceService {
+public class SkubanaService implements EcommerceService {
 
   private final EcommerceConnection connection;
-  private final ChannelAdvisorLiveConfig config;
+  private final SkubanaLiveConfig config;
 
-  public ChannelAdvisorService(ChannelAdvisorConnection connection,
-      ChannelAdvisorLiveConfig config) {
+  public SkubanaService(SkubanaConnection connection,
+                        SkubanaLiveConfig config) {
     this.connection = connection;
     this.config = config;
   }
@@ -27,18 +27,18 @@ public class ChannelAdvisorService implements EcommerceService {
 
   @Override
   public String getServiceName() {
-    return "CHANNEL_ADVISOR";
+    return "SKUBANA";
   }
 
   @Override
   public String getPurchasingChannelName() {
-    return "Channel Advisor - Walmart";
+    return "Skubana - Walmart";
   }
 
   @Override
   @Deprecated
   public String getExternalIdName() {
-    return "CHANNEL_ADVISOR_WALMART";
+    return "SKUBANA_WALMART";
   }
 
   @Override

@@ -1,6 +1,6 @@
-package com.symphonycommerce.deejay.channeladvisor;
+package com.symphonycommerce.deejay.skubana;
 
-import com.symphonycommerce.deejay.channeladvisor.connector.ConnectionProvider;
+import com.symphonycommerce.deejay.skubana.connector.ConnectionProvider;
 import com.symphonycommerce.deejay.ecommerce.EcommerceService;
 import com.symphonycommerce.deejay.ecommerce.ServiceFactory;
 import com.symphonycommerce.deejay.store.DynamoDbConnection;
@@ -11,23 +11,23 @@ import com.symphonycommerce.deejay.store.DynamoDbConnection;
  * ugly and I would put it in the #hack category to be cleaned up. Open to suggestions. Perhaps
  * ServiceLocator from JDK 6 would be more cononical, but that is a little ugly as well.
  */
-public class ChannelAdvisorServiceFactory implements ServiceFactory<ChannelAdvisorLiveConfig> {
+public class SkubanaServiceFactory implements ServiceFactory<SkubanaLiveConfig> {
 
   @Override
-  public EcommerceService create(ChannelAdvisorLiveConfig liveConfig,
+  public EcommerceService create(SkubanaLiveConfig liveConfig,
       DynamoDbConnection dbConnection) {
-    ChannelAdvisorConnection channelAdvisorConnection = new ChannelAdvisorConnection(
+    SkubanaConnection skubanaConnection = new SkubanaConnection(
         new ConnectionProvider(liveConfig));
-    return new ChannelAdvisorService(channelAdvisorConnection, liveConfig);
+    return new SkubanaService(skubanaConnection, liveConfig);
   }
 
   @Override
   public Class configurationClass() {
-    return ChannelAdvisorLiveConfig.class;
+    return SkubanaLiveConfig.class;
   }
 
   @Override
   public String serviceName() {
-    return "CHANNEL_ADVISOR";
+    return "SKUBANA";
   }
 }

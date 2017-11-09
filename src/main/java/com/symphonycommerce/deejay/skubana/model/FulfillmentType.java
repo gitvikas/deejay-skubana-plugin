@@ -1,4 +1,4 @@
-package com.symphonycommerce.deejay.channeladvisor.model;
+package com.symphonycommerce.deejay.skubana.model;
 
 public enum FulfillmentType {
     Ship,
