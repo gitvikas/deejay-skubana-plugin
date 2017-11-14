@@ -1,106 +1,73 @@
 package com.symphonycommerce.deejay.skubana.connector;
 
-import com.google.common.collect.Maps;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 import com.symphonycommerce.deejay.skubana.SkubanaLiveConfig;
-import com.symphonycommerce.deejay.skubana.model.Oauth2Response;
 
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
+import java.io.IOException;
 import java.util.logging.Level;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.client.*;
 
 public class ConnectionProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(ConnectionProvider.class.getName());
 
   private final SkubanaLiveConfig config;
-  private final Client client;
-  private final WebTarget rootTarget;
-  private final Map<String, OAuthToken> brandToAuthToken;
 
   /** Creates a connection provider using a configuration that has been loaded from the databse. */
   public ConnectionProvider(SkubanaLiveConfig liveConfig) {
     this.config = liveConfig;
-
-    this.brandToAuthToken = Maps.newHashMap();
-
-    liveConfig
-        .getBrandToRefreshToken()
-        .forEach(
-            (brand, token) -> {
-              brandToAuthToken.put(brand, new OAuthToken(token));
-            });
-
-    this.client =
-        ClientBuilder.newBuilder()
-            .property(
-                LoggingFeature.LOGGING_FEATURE_VERBOSITY_CLIENT,
-                LoggingFeature.Verbosity.PAYLOAD_ANY)
-            .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO")
-            .register(new JulFacade())
-            .register(new JacksonFeature())
-            .build();
-
-    this.rootTarget = client.target("https://api.channeladvisor.com");
   }
 
-  public SkubanaLiveConfig getLiveConfig() {
-    return config;
-  }
-
-  /**
-   * Will return a WebTarget that can be used to make a HTTP request against CA. It will perform the
-   * necessary OAUTH steps like keeping track of token expiry and fetching a new token.
-   */
+  /** Gets a client that can be used for making requests. */
   public WebTarget getAuthenticatedClient(String brand) {
-    final OAuthToken auth = brandToAuthToken.get(brand);
-
-    if (auth.getExpirationTime().isBeforeNow()) {
-      Oauth2Response newAuthTokens = getNewAccessToken(auth);
-      DateTime newTime =
-          DateTime.now()
-              .plusSeconds(newAuthTokens.getExpiresInSeconds())
-              .minusSeconds(5); // for some buffer
-      auth.setAccessToken(newAuthTokens.getAccessToken(), newTime);
-    }
-
-    return rootTarget.queryParam("access_token", auth.getAccessToken());
+    return getClientByBrand(brand).target("https://demo.skubana.com/service/");
   }
 
-  /** A lower level method to fetch an oauth token. */
-  public Oauth2Response getNewAccessToken(OAuthToken auth) {
-    LOG.info("fetching mew access token for {}", auth);
+  public WebTarget getAuthenticatedClientByToken(String authToken) {
+    return getClientByToken(authToken).target("https://demo.skubana.com/service/");
+  }
 
-    Client client = ClientBuilder.newClient();
+  private Client getClientByBrand(String brand) {
+    return clientCache.getUnchecked(brand);
+  }
 
-    HttpAuthenticationFeature feature =
-        HttpAuthenticationFeature.basic(config.getAppId(), config.getSharedSecret());
+  private LoadingCache<String, Client> clientCache =
+      CacheBuilder.newBuilder()
+          .maximumSize(20)
+          .build(
+              new CacheLoader<String, Client>() {
+                public Client load(String brand) {
+                  final String authToken = config.getBrandToRefreshToken().get(brand);
+                  return getClientByToken(authToken);
+                }
+              });
 
-    client.register(feature);
-    client.register(new JacksonFeature());
+  private Client getClientByToken(String authToken) {
 
-    MultivaluedMap<String, String> formData = new MultivaluedHashMap<>();
-    formData.add("grant_type", "refresh_token");
-    formData.add("refresh_token", auth.getRefreshToken());
-
-    return client
-        .target("https://api.channeladvisor.com")
-        .path("/oauth2/token")
-        .request()
-        .post(Entity.form(formData), Oauth2Response.class);
+    return ClientBuilder.newBuilder()
+        .property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true)
+        .property(
+            LoggingFeature.LOGGING_FEATURE_VERBOSITY_CLIENT, LoggingFeature.Verbosity.PAYLOAD_ANY)
+        .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO")
+        .register(new JulFacade())
+        .register(new JacksonFeature())
+        .register(new ClientRequestFilter() {
+          @Override
+          public void filter(ClientRequestContext requestContext) throws IOException {
+              requestContext.getHeaders().add("Authorization", "Bearer " + authToken);
+          }
+      })
+        .build();
   }
 
   private static class JulFacade extends java.util.logging.Logger {

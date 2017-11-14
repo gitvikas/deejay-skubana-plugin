@@ -17,19 +17,20 @@ import java.util.List;
 import java.util.Map;
 
 public class SkubanaConnectionTest implements ConnectionIntegrationTest {
+
   private static final Logger LOG = LoggerFactory.getLogger(SkubanaConnectionTest.class.getName());
+  private String authToken;
 
   EcommerceConnection connection;
 
   @BeforeMethod
   public void setUp() throws Exception {
+    authToken = "0d996973-62b6-4118-8192-5c0031cd0e08";
     Map<String, String> refreshTokens = new HashMap<>();
-    refreshTokens.put("testBrand", "ZVHLQGL0SZ0KjKVgGnf_1TZIReoV5P8tnq-BhuDwTNE");
-    refreshTokens.put("botoys", "ECA-_z5oXj4n1jwo_7EIpMrIneFltFrSCaZI-AMfYqk");
-    refreshTokens.put("grivitz", "2FxRTntXfz_dQ1MOcA4Ux4trnbAxUz7i0haIu4xJUno");
+    refreshTokens.put(getBrand(), authToken);
     SkubanaLiveConfig liveConfig = new SkubanaLiveConfig();
-    liveConfig.setAppId("0lhvroo4vhajixeb7s70sje1kv3ejkid");
-    liveConfig.setSharedSecret("8RMl8GjyYUSLQHG-Nz8ozw");
+    //    liveConfig.setAppId("5aUQOevoAUK0x2R4Kk6NNE2Ih5WdwrIZ");
+    //    liveConfig.setSharedSecret("TYRgvk61FO2wsKKEeu5NdfZskz8hEme2");
     liveConfig.setBrandToRefreshToken(refreshTokens);
 
     ConnectionProvider provider = new ConnectionProvider(liveConfig);
@@ -37,9 +38,29 @@ public class SkubanaConnectionTest implements ConnectionIntegrationTest {
   }
 
   @Override
-  @Test(enabled = false)
+  public EcommerceConnection getConnection() {
+    return connection;
+  }
+
+  @Override
+  public String getBrand() {
+    return "testBrand";
+  }
+
+  @Test
+  public void testInvalidAuthKeyReturningError() throws Exception {
+    getConnection().validateAuthKey("fake:key");
+  }
+
+  @Test
+  public void testRealAuthKeyShouldNotThrowError() throws Exception {
+    getConnection().validateAuthKey(authToken);
+  }
+
+  @Test
+  @Override
   public void testProductsShouldHaveNecessaryFields() throws JsonProcessingException {
-    List<ProductEntity> products = connection.getAllProducts("grivitz");
+    List<ProductEntity> products = connection.getAllProducts("testBrand");
     System.out.println(products);
     EcommConnectionTestHelpers.assertValidProduct(products.get(0));
   }
@@ -50,7 +71,7 @@ public class SkubanaConnectionTest implements ConnectionIntegrationTest {
     EcommConnectionTestHelpers.assertValidCustomerInfo(orders.get(0));
   }
 
-  @Test(enabled = true)
+  @Test(enabled = false)
   @Override
   public void testNewOrderAddressShouldBeValid() throws Exception {
     List<OrderEntity> orders = getConnection().getRecentOrders(getBrand());
@@ -71,14 +92,4 @@ public class SkubanaConnectionTest implements ConnectionIntegrationTest {
 
   @Override
   public void testNewOrderShouldHaveRequiredFulfillmentFields() throws Exception {}
-
-  @Override
-  public EcommerceConnection getConnection() {
-    return connection;
-  }
-
-  @Override
-  public String getBrand() {
-    return "testBrand";
-  }
 }
