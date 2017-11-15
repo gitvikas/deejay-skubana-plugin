@@ -12,8 +12,8 @@ import java.util.Set;
 @DynamoDBTable(tableName = "Deejay.Config")
 public class SkubanaLiveConfig extends DeejayLiveConfig {
 
-//  private String appId;
-//  private String sharedSecret;
+  //  private String appId;
+  //  private String sharedSecret;
   private Map<String, String> brandToRefreshToken;
 
   @DynamoDBIgnore
@@ -30,23 +30,23 @@ public class SkubanaLiveConfig extends DeejayLiveConfig {
     this.brandToRefreshToken = brandToRefreshToken;
   }
 
-//  @DynamoDBAttribute(attributeName = "appId")
-//  public String getAppId() {
-//    return appId;
-//  }
-//
-//  public void setAppId(String appId) {
-//    this.appId = appId;
-//  }
-//
-//  @DynamoDBAttribute(attributeName = "sharedSecret")
-//  public String getSharedSecret() {
-//    return sharedSecret;
-//  }
-//
-//  public void setSharedSecret(String sharedSecret) {
-//    this.sharedSecret = sharedSecret;
-//  }
+  //  @DynamoDBAttribute(attributeName = "appId")
+  //  public String getAppId() {
+  //    return appId;
+  //  }
+  //
+  //  public void setAppId(String appId) {
+  //    this.appId = appId;
+  //  }
+  //
+  //  @DynamoDBAttribute(attributeName = "sharedSecret")
+  //  public String getSharedSecret() {
+  //    return sharedSecret;
+  //  }
+  //
+  //  public void setSharedSecret(String sharedSecret) {
+  //    this.sharedSecret = sharedSecret;
+  //  }
 
   @Override
   public boolean equals(Object obj) {
@@ -58,13 +58,13 @@ public class SkubanaLiveConfig extends DeejayLiveConfig {
     }
     SkubanaLiveConfig that = (SkubanaLiveConfig) obj;
     return Objects.equals(brandToRefreshToken, that.brandToRefreshToken);
-//        && Objects.equals(sharedSecret, that.sharedSecret)
-//        && Objects.equals(appId, that.appId);
+    //        && Objects.equals(sharedSecret, that.sharedSecret)
+    //        && Objects.equals(appId, that.appId);
   }
 
   @Override
   public int hashCode() {
-//    return Objects.hash(appId, sharedSecret, brandToRefreshToken);
+    //    return Objects.hash(appId, sharedSecret, brandToRefreshToken);
     return Objects.hash(brandToRefreshToken);
   }
 }

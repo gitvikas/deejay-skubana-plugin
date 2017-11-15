@@ -15,7 +15,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import javax.ws.rs.client.*;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.WebTarget;
 
 public class ConnectionProvider {
 
@@ -61,12 +65,13 @@ public class ConnectionProvider {
         .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO")
         .register(new JulFacade())
         .register(new JacksonFeature())
-        .register(new ClientRequestFilter() {
-          @Override
-          public void filter(ClientRequestContext requestContext) throws IOException {
-              requestContext.getHeaders().add("Authorization", "Bearer " + authToken);
-          }
-      })
+        .register(
+            new ClientRequestFilter() {
+              @Override
+              public void filter(ClientRequestContext requestContext) throws IOException {
+                requestContext.getHeaders().add("Authorization", "Bearer " + authToken);
+              }
+            })
         .build();
   }
 

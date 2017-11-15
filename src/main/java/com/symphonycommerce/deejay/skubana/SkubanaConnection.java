@@ -50,16 +50,16 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
    * rather than extensive configuration changes.
    */
   private LoadingCache<String, Integer> distributionCenterIds =
-          CacheBuilder.newBuilder()
-                  .maximumSize(20)
-                  .build(
-                          new CacheLoader<String, Integer>() {
-                            public Integer load(String key) {
-                              DistributionCenter dc = findSymphonyDc(key);
-                              LOG.info("SkubanaConnection - get DC ID for {}: {}", key, dc);
-                              return dc.getId();
-                            }
-                          });
+      CacheBuilder.newBuilder()
+          .maximumSize(20)
+          .build(
+              new CacheLoader<String, Integer>() {
+                public Integer load(String key) {
+                  DistributionCenter dc = findSymphonyDc(key);
+                  LOG.info("SkubanaConnection - get DC ID for {}: {}", key, dc);
+                  return dc.getId();
+                }
+              });
 
   private final ConnectionProvider provider;
 
@@ -74,11 +74,7 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
       // There isn't a designated way of figuring out if an API key is valid on sellbrite,
       // the only thing we can do is try a legal request and see if it goes through,
       // and if we get an exception means the auth keys is not valid.
-      provider
-              .getAuthenticatedClientByToken(authKey)
-              .path("/v1/products")
-              .request()
-              .get();
+      provider.getAuthenticatedClientByToken(authKey).path("/v1/products").request().get();
       return true;
     } catch (WebApplicationException ex) {
       LOG.error("verifyAuth", ex);
@@ -88,7 +84,7 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
 
   @Override
   public List<ProductEntity> getAllProducts(String brand)
-          throws ProcessingException, WebApplicationException {
+      throws ProcessingException, WebApplicationException {
     return (List<ProductEntity>) collectPages(this::getPagedProducts, brand);
   }
 
@@ -104,30 +100,30 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
    */
   DistributionCenter findSymphonyDc(String brand) {
     return provider
-            .getAuthenticatedClient(brand)
-            .path("/v1/DistributionCenters")
-            .request()
-            .get(new GenericType<ApiListWrapper<DistributionCenter>>() {})
-            .getValue()
-            .stream()
-            .filter(dc -> DISTRIBUTION_CENTER_ID.equalsIgnoreCase(dc.getCode()))
-            .findFirst()
-            .orElseThrow(IllegalConfigurationException::new);
+        .getAuthenticatedClient(brand)
+        .path("/v1/DistributionCenters")
+        .request()
+        .get(new GenericType<ApiListWrapper<DistributionCenter>>() {})
+        .getValue()
+        .stream()
+        .filter(dc -> DISTRIBUTION_CENTER_ID.equalsIgnoreCase(dc.getCode()))
+        .findFirst()
+        .orElseThrow(IllegalConfigurationException::new);
   }
 
   /** ===== PRODUCTS. */
   @Override
   public ApiListWrapper<? extends ProductEntity> getPagedProducts(String brand, Integer page) {
     // Integer dcId = distributionCenterIds.getUnchecked(brand);
-    List<Product> products = provider
+    List<Product> products =
+        provider
             .getAuthenticatedClient(brand)
             .path("/v1/products")
             .queryParam("page", page)
             .queryParam("limit", SkubanaApiListWrapper.PAGE_LIMIT)
             //        .queryParam("$filter", "Labels/Any (c:c/Name eq 'Symphony')")
             .request()
-            .get(new GenericType<List<Product>>() {
-            });
+            .get(new GenericType<List<Product>>() {});
     SkubanaApiListWrapper skubanaApiListWrapper = new SkubanaApiListWrapper();
     skubanaApiListWrapper.setValue(products);
     return skubanaApiListWrapper;
@@ -151,21 +147,21 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
     Preconditions.checkNotNull(dcId);
 
     ApiListWrapper<Order> result =
-            provider
-                    .getAuthenticatedClient(brand)
-                    .path("/v1/orders")
-                    .queryParam("$expand", "Items($expand=Adjustments),Fulfillments($expand=Items)")
-                    .queryParam("exported", false)
-                    .queryParam("$skip", page)
-                    .queryParam(
-                            "$filter",
-                            "PaymentStatus eq 'Cleared' and Fulfillments/Any (c: "
-                                    + "c/DistributionCenterID eq "
-                                    + dcId
-                                    + ") and ShippingStatus ne 'Shipped'"
-                                    + " and ShippingStatus ne 'Canceled'")
-                    .request()
-                    .get(new GenericType<ApiListWrapper<Order>>() {});
+        provider
+            .getAuthenticatedClient(brand)
+            .path("/v1/orders")
+            .queryParam("$expand", "Items($expand=Adjustments),Fulfillments($expand=Items)")
+            .queryParam("exported", false)
+            .queryParam("$skip", page)
+            .queryParam(
+                "$filter",
+                "PaymentStatus eq 'Cleared' and Fulfillments/Any (c: "
+                    + "c/DistributionCenterID eq "
+                    + dcId
+                    + ") and ShippingStatus ne 'Shipped'"
+                    + " and ShippingStatus ne 'Canceled'")
+            .request()
+            .get(new GenericType<ApiListWrapper<Order>>() {});
 
     return result;
   }
@@ -180,54 +176,54 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
   @Override
   public ApiListWrapper<? extends OrderEntity> getPagedRecentOrders(String brand, Integer page) {
     return provider
-            .getAuthenticatedClient(brand)
-            .path("/v1/orders")
-            .queryParam("$expand", "Items($expand=Adjustments),Fulfillments($expand=Items)")
-            .queryParam("$filter", "ShippingStatus ne 'Shipped' and ShippingStatus ne " + "'Canceled'")
-            .queryParam("exported", true)
-            .queryParam("$skip", page)
-            .request()
-            .get(new GenericType<ApiListWrapper<Order>>() {});
+        .getAuthenticatedClient(brand)
+        .path("/v1/orders")
+        .queryParam("$expand", "Items($expand=Adjustments),Fulfillments($expand=Items)")
+        .queryParam("$filter", "ShippingStatus ne 'Shipped' and ShippingStatus ne " + "'Canceled'")
+        .queryParam("exported", true)
+        .queryParam("$skip", page)
+        .request()
+        .get(new GenericType<ApiListWrapper<Order>>() {});
   }
 
   /** Awknowledge that the order has beenc reated on our side. */
   @Override
   public void acknowledgeOrder(String brand, String marketplace, String id) {
     errorsToExceptions(
-            provider
-                    .getAuthenticatedClient(brand)
-                    .path("/v1/orders({orderId})/Export")
-                    .resolveTemplate("orderId", id)
-                    .request()
-                    .post(Entity.json("")));
+        provider
+            .getAuthenticatedClient(brand)
+            .path("/v1/orders({orderId})/Export")
+            .resolveTemplate("orderId", id)
+            .request()
+            .post(Entity.json("")));
   }
 
   /** Tell Channel Advisor that this order has some shipments. */
   @Override
   public void shipOrderFullyOrPartialy(
-          String brand, String marketplace, String orderId, FulfillmentEntity shipment) {
+      String brand, String marketplace, String orderId, FulfillmentEntity shipment) {
     errorsToExceptions(
-            provider
-                    .getAuthenticatedClient(brand)
-                    .path("/v1/Orders({orderId})/Ship")
-                    .resolveTemplate("orderId", orderId)
-                    .request()
-                    .post(Entity.json(new ApiPost<>(new Shipment(shipment)))));
+        provider
+            .getAuthenticatedClient(brand)
+            .path("/v1/Orders({orderId})/Ship")
+            .resolveTemplate("orderId", orderId)
+            .request()
+            .post(Entity.json(new ApiPost<>(new Shipment(shipment)))));
   }
 
   /** Partially cancel items on Channel Advisor. */
   @Override
   public void cancelItems(
-          String brand, String marketplace, String orderId, String orderItemId, int qtyToCancel) {
+      String brand, String marketplace, String orderId, String orderItemId, int qtyToCancel) {
     OrderItemAdjustment adjustment =
-            OrderItemAdjustment.makeCancellation(qtyToCancel, "Symphony-" + orderItemId);
+        OrderItemAdjustment.makeCancellation(qtyToCancel, "Symphony-" + orderItemId);
     errorsToExceptions(
-            provider
-                    .getAuthenticatedClient(brand)
-                    .path("/v1/OrderItems({OrderItemID})/Adjust")
-                    .resolveTemplate("OrderItemID", orderItemId)
-                    .request()
-                    .post((Entity.json(adjustment))));
+        provider
+            .getAuthenticatedClient(brand)
+            .path("/v1/OrderItems({OrderItemID})/Adjust")
+            .resolveTemplate("OrderItemID", orderItemId)
+            .request()
+            .post((Entity.json(adjustment))));
   }
 
   /**
@@ -237,12 +233,12 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
   public void updateItemInventory(String brand, String productId, Optional<String> dcId, int qty) {
     UpdateQuantity update = UpdateQuantity.makeInventoryUpdate(dcId, qty);
     errorsToExceptions(
-            provider
-                    .getAuthenticatedClient(brand)
-                    .path("/v1/Products({ProductID})/UpdateQuantity")
-                    .resolveTemplate("ProductID", productId)
-                    .request()
-                    .post((Entity.json(new ApiPost<>(update)))));
+        provider
+            .getAuthenticatedClient(brand)
+            .path("/v1/Products({ProductID})/UpdateQuantity")
+            .resolveTemplate("ProductID", productId)
+            .request()
+            .post((Entity.json(new ApiPost<>(update)))));
   }
 
   /** ===== HELPER FUNCTIONS. */
@@ -253,7 +249,7 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
    */
   public void errorsToExceptions(Response response) throws WebApplicationException {
     if (Response.Status.Family.familyOf(response.getStatus())
-            != Response.Status.Family.SUCCESSFUL) {
+        != Response.Status.Family.SUCCESSFUL) {
       throw new WebApplicationException(response);
     }
   }
