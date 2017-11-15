@@ -24,21 +24,23 @@ import javax.ws.rs.client.WebTarget;
 public class ConnectionProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(ConnectionProvider.class.getName());
+  private static final String rootTarget = "https://demo.skubana.com/service/";
 
   private final SkubanaLiveConfig config;
 
-  /** Creates a connection provider using a configuration that has been loaded from the databse. */
+  /** Creates a connection provider using a configuration that has been loaded from the database. */
   public ConnectionProvider(SkubanaLiveConfig liveConfig) {
     this.config = liveConfig;
+
   }
 
   /** Gets a client that can be used for making requests. */
   public WebTarget getAuthenticatedClient(String brand) {
-    return getClientByBrand(brand).target("https://demo.skubana.com/service/");
+    return getClientByBrand(brand).target(rootTarget);
   }
 
   public WebTarget getAuthenticatedClientByToken(String authToken) {
-    return getClientByToken(authToken).target("https://demo.skubana.com/service/");
+    return getClientByToken(authToken).target(rootTarget);
   }
 
   private Client getClientByBrand(String brand) {

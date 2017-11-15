@@ -29,8 +29,6 @@ public class SkubanaConnectionTest implements ConnectionIntegrationTest {
     Map<String, String> refreshTokens = new HashMap<>();
     refreshTokens.put(getBrand(), authToken);
     SkubanaLiveConfig liveConfig = new SkubanaLiveConfig();
-    //    liveConfig.setAppId("5aUQOevoAUK0x2R4Kk6NNE2Ih5WdwrIZ");
-    //    liveConfig.setSharedSecret("TYRgvk61FO2wsKKEeu5NdfZskz8hEme2");
     liveConfig.setBrandToRefreshToken(refreshTokens);
 
     ConnectionProvider provider = new ConnectionProvider(liveConfig);
@@ -60,7 +58,7 @@ public class SkubanaConnectionTest implements ConnectionIntegrationTest {
   @Test
   @Override
   public void testProductsShouldHaveNecessaryFields() throws JsonProcessingException {
-    List<ProductEntity> products = connection.getAllProducts("testBrand");
+    List<ProductEntity> products = getConnection().getAllProducts("testBrand");
     System.out.println(products);
     EcommConnectionTestHelpers.assertValidProduct(products.get(0));
   }

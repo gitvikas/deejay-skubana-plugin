@@ -74,7 +74,11 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
       // There isn't a designated way of figuring out if an API key is valid on sellbrite,
       // the only thing we can do is try a legal request and see if it goes through,
       // and if we get an exception means the auth keys is not valid.
-      provider.getAuthenticatedClientByToken(authKey).path("/v1/products").request().get();
+      provider
+          .getAuthenticatedClientByToken(authKey)
+          .path("/v1/products")
+          .request()
+          .get(new GenericType<List<Product>>() {});
       return true;
     } catch (WebApplicationException ex) {
       LOG.error("verifyAuth", ex);
@@ -121,7 +125,6 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
             .path("/v1/products")
             .queryParam("page", page)
             .queryParam("limit", SkubanaApiListWrapper.PAGE_LIMIT)
-            //        .queryParam("$filter", "Labels/Any (c:c/Name eq 'Symphony')")
             .request()
             .get(new GenericType<List<Product>>() {});
     SkubanaApiListWrapper skubanaApiListWrapper = new SkubanaApiListWrapper();
