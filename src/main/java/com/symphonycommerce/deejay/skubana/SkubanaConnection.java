@@ -257,7 +257,7 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
     }
   }
 
-  /** A helper method that walks the paginated results that come back from Channel Advisor. */
+  /** A helper method that walks the paginated results that come back from Skubana. */
   public List<?> collectPages(BiFunction<String, Integer, ApiListWrapper<?>> fn, String brand) {
     List<Object> allOrders = Lists.newArrayList();
 
