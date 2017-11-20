@@ -1,11 +1,11 @@
 package com.symphonycommerce.deejay.skubana.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.symphonycommerce.deejay.ecommerce.NameUtils;
 import com.symphonycommerce.deejay.ecommerce.entities.Address;
 import com.symphonycommerce.deejay.ecommerce.entities.AddressBuilder;
-import com.symphonycommerce.deejay.ecommerce.entities.FulfillmentEntity;
 import com.symphonycommerce.deejay.ecommerce.entities.OrderEntity;
 
 import java.util.List;
@@ -15,22 +15,32 @@ import java.util.Optional;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Order implements OrderEntity {
 
-  private Map<String, String> customer;
+  private Integer orderId;
+  private Map<String, String> salesChannel;
+  private OrderCustomer customer;
   private String shipName;
   private String shipCompany;
   private String shipAddress1;
   private String shipAddress2;
+  private String shipAddress3;
   private String shipZipCode;
   private String shipCity;
   private String shipState;
   private String shipCountry;
   private String shipPhone;
+  private List<Shipment> shipment;
 
-  // TODO: 16/11/17 Get in touch with Skubana people to know which API field represents Marketplace
+  @JsonProperty("orderItems")
+  private List<OrderLineItem> items;
+
   @Override
   public String getMarketplace() {
-    return null;
+    return salesChannel.get("type");
   }
+
+  // TODO: 16/11/17 Ask Skubana: How do I map shipping service information such as “GROUND”
+  // TODO: 20/11/17 Ask Art: How important is getShippingClass. Its not there in skuban api's. what
+  // default value should I return
 
   @Override
   public ShippingClass getShippingClass(Optional<String> warehouseId) {
@@ -39,28 +49,20 @@ public class Order implements OrderEntity {
 
   @Override
   public String getBillingFirstName() {
-    String firstName = NameUtils.getFirstName(customer.get("name"));
+    String firstName = NameUtils.getFirstName(customer.getName());
     return firstName;
   }
 
   @Override
   public String getBillingLastName() {
-    String lastName = NameUtils.getLastName(customer.get("name"));
+    String lastName = NameUtils.getLastName(customer.getName());
     return lastName;
   }
 
-  // TODO: 16/11/17 This needs to be completed
-  /* "customer": {
-    "companyName": "string",
-    "emailAddresses": [
-      "string"
-    ],
-    "name": "string"
-  },*/
   @Override
   public String getEmail() {
-    String emailAddresses = customer.get("emailAddresses");
-    return emailAddresses;
+    String[] emailAddresses = customer.getEmailAddresses();
+    return emailAddresses.length >= 1 ? emailAddresses[0] : null;
   }
 
   @Override
@@ -70,7 +72,7 @@ public class Order implements OrderEntity {
         .setLastName(NameUtils.getLastName(shipName))
         .setCompany(shipCompany)
         .setAddress1(shipAddress1)
-        .setAddress2(shipAddress2)
+        .setAddress2(shipAddress2 + " " + shipAddress3)
         .setZip(shipZipCode)
         .setCity(shipCity)
         .setState(shipState)
@@ -80,17 +82,17 @@ public class Order implements OrderEntity {
   }
 
   @Override
-  public List<? extends FulfillmentEntity> getFulfillments() {
-    return null;
+  public List<Shipment> getFulfillments() {
+    return shipment;
   }
 
   @Override
-  public List<? extends OrderLineItem> getItems() {
-    return null;
+  public List<OrderLineItem> getItems() {
+    return items;
   }
 
   @Override
   public String getIdString() {
-    return null;
+    return orderId.toString();
   }
 }

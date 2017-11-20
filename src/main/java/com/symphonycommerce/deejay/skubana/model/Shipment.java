@@ -3,162 +3,85 @@ package com.symphonycommerce.deejay.skubana.model;
 import com.google.common.base.MoreObjects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.symphonycommerce.deejay.ecommerce.entities.FulfillmentEntity;
 
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Shipment implements FulfillmentEntity {
 
-  enum FulfillmentType {
-    Ship,
-    Pickup,
-    ShipToStore,
-    Courier
+  enum ShipmentDeliveryStatus {
+    UNKNOWN,
+    IN_TRANSIT,
+    DELIVERED,
+    LOST_IN_TRANSIT,
+    RETURN_TO_SENDER,
+    UNDELIVERABLE,
+    FORWARDED,
+    VOIDED
   }
-
-  public Shipment() {}
-
-  /** Constructor. */
-  public Shipment(FulfillmentEntity entity) {
-    this.trackingNumber = entity.getTrackingNumber();
-    this.shippingCarrier = entity.getShippingCarrier();
-    this.shippingClass = entity.getShippingClass();
-    this.deliveryStatus = entity.getDeliveryStatus();
-    this.distributionCenterId = entity.getDistributionCenterId();
-    this.items =
-        entity
-            .getItems()
-            .stream()
-            .map(
-                x ->
-                    com.symphonycommerce.deejay.skubana.model.ShipmentItem
-                        .createShipmentItemWithProductId(x.getProductId(), x.getQuantity()))
-            .collect(Collectors.toList());
-  }
-
-  // Available, but unused by us..
-
-  private String sellerFulfillmentId;
-
-  private FulfillmentType fulfilmentType;
-
-  private String distributionCenterId; // optional
-
-  // Typically sent every time
-
-  private Date shippedDateUtc;
 
   private String trackingNumber;
+  private String warehouseId;
+  private ShipmentDeliveryStatus deliveryStatus;
 
-  private FulfillmentStatus deliveryStatus;
+  @JsonProperty("shipMethod")
+  private ShipmentMethod shipmentMethod;
 
-  private String shippingCarrier; // FEDEX, UPS, USPS
-
-  private String shippingClass; // TODO:  Shipping Method conversion needs to happen here:
-  // http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
-
-  // Sent only for partial shipments..
-  private List<com.symphonycommerce.deejay.skubana.model.ShipmentItem> items;
-
-  @JsonProperty(value = "Items", required = true)
-  public List<com.symphonycommerce.deejay.skubana.model.ShipmentItem> getItems() {
-    return items;
+  // TODO: 20/11/17 Ask Skubana: It appears that you assume that the entire order is shipped in one
+  // shipment. Can we do partial shipment where we ship only some of the line items and not all line
+  // items. Can't field items for shipment in skubana api
+  @Override
+  public List<? extends ShipmentItem> getItems() {
+    return null;
   }
 
-  @JsonProperty("SellerFulfillmentID")
-  public String getSellerFulfillmentId() {
-    return sellerFulfillmentId;
-  }
-
-  @JsonProperty("FulfilmentType")
-  public FulfillmentType getFulfilmentType() {
-    return fulfilmentType;
-  }
-
-  @JsonProperty("DistributionCenterID")
-  public String getDistributionCenterId() {
-    return distributionCenterId;
-  }
-
-  @JsonProperty("ShippedDateUtc") // optional but encouraged.
-  public Date getShippedDateUtc() {
-    return shippedDateUtc;
-  }
-
-  @JsonProperty(value = "TrackingNumber", required = true)
+  @Override
   public String getTrackingNumber() {
     return trackingNumber;
   }
 
-  @JsonProperty(value = "DeliveryStatus", required = true)
-  public FulfillmentStatus getDeliveryStatus() {
-    return deliveryStatus;
-  }
-
-  @JsonProperty(value = "ShippingCarrier", required = true)
-  public String getShippingCarrier() {
-    return shippingCarrier;
-  }
-
-  @JsonProperty(value = "ShippingClass", required = true)
-  public String getShippingClass() {
-    return shippingClass;
-  }
-
-  public void setSellerFulfillmentId(String sellerFulfillmentId) {
-    this.sellerFulfillmentId = sellerFulfillmentId;
-  }
-
-  public void setFulfilmentType(FulfillmentType fulfilmentType) {
-    this.fulfilmentType = fulfilmentType;
-  }
-
-  public void setDistributionCenterId(String distributionCenterId) {
-    this.distributionCenterId = distributionCenterId;
-  }
-
-  public void setShippedDateUtc(Date shippedDateUtc) {
-    this.shippedDateUtc = shippedDateUtc;
-  }
-
-  public void setTrackingNumber(String trackingNumber) {
-    this.trackingNumber = trackingNumber;
-  }
-
-  public void setDeliveryStatus(FulfillmentStatus deliveryStatus) {
-    this.deliveryStatus = deliveryStatus;
-  }
-
-  public void setShippingCarrier(String shippingCarrier) {
-    this.shippingCarrier = shippingCarrier;
-  }
-
-  public void setShippingClass(String shippingClass) {
-    this.shippingClass = shippingClass;
-  }
-
-  public void setItems(List<com.symphonycommerce.deejay.skubana.model.ShipmentItem> items) {
-    this.items = items;
+  @Override
+  public String getDistributionCenterId() {
+    return warehouseId;
   }
 
   @Override
-  public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("sellerFulfillmentID", sellerFulfillmentId)
-        .add("FulfilmentType", fulfilmentType)
-        .add("DistributionCenterID", distributionCenterId)
-        .add("shippedDateUtc", shippedDateUtc)
-        .add("trackingNumber", trackingNumber)
-        .add("DeliveryStatus", deliveryStatus)
-        .add("shippingCarrier", shippingCarrier)
-        .add("shippingClass", shippingClass)
-        .add("items", items)
-        .toString();
+  public String getShippingCarrier() {
+    return shipmentMethod.getShippingCarrier();
+  }
+
+  // TODO: 20/11/17 Same as com/symphonycommerce/deejay/skubana/model/Order.java:41
+  @Override
+  public String getShippingClass() {
+    return null;
+  }
+
+  @Override
+  public FulfillmentStatus getDeliveryStatus() {
+    // TODO: 20/11/17 Ask Art: This needs to be validated
+    if (trackingNumber == null) {
+      return FulfillmentStatus.NoChange; // As implemented in sellbrite
+    }
+
+    switch (deliveryStatus) {
+      case IN_TRANSIT:
+        return FulfillmentStatus.InTransit;
+      case VOIDED:
+        return FulfillmentStatus.Canceled;
+      case UNDELIVERABLE:
+      case LOST_IN_TRANSIT:
+      case RETURN_TO_SENDER:
+        return FulfillmentStatus.Failed;
+      case DELIVERED:
+        return FulfillmentStatus.Complete;
+
+        // TODO: 20/11/17 Ask Skubana what's the use case for this cases.
+      case FORWARDED:
+      case UNKNOWN:
+    }
+
+    return null;
   }
 }
