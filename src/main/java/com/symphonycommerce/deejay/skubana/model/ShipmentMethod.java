@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShipmentMethod {
-  public int packageTypeId;
+  public Long packageTypeId;
   public String shippingCarrier;
-  public int shippingProviderId;
-  public int shippingServiceId;
+  public Long shippingProviderId;
+  public Long shippingServiceId;
 
-  public int getPackageTypeId() {
+  public Long getPackageTypeId() {
     return packageTypeId;
   }
 
@@ -17,11 +17,11 @@ public class ShipmentMethod {
     return shippingCarrier;
   }
 
-  public int getShippingProviderId() {
+  public Long getShippingProviderId() {
     return shippingProviderId;
   }
 
-  public int getShippingServiceId() {
+  public Long getShippingServiceId() {
     return shippingServiceId;
   }
 }

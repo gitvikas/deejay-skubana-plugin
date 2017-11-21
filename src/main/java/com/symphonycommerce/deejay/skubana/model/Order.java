@@ -15,7 +15,8 @@ import java.util.Optional;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Order implements OrderEntity {
 
-  private Integer orderId;
+  @JsonProperty(required = true)
+  private Long orderId;
   private Map<String, String> salesChannel;
   private OrderCustomer customer;
   private String shipName;
@@ -44,7 +45,7 @@ public class Order implements OrderEntity {
 
   @Override
   public ShippingClass getShippingClass(Optional<String> warehouseId) {
-    return null;
+    return ShippingClass.GROUND;
   }
 
   @Override
@@ -62,7 +63,7 @@ public class Order implements OrderEntity {
   @Override
   public String getEmail() {
     String[] emailAddresses = customer.getEmailAddresses();
-    return emailAddresses.length >= 1 ? emailAddresses[0] : null;
+    return emailAddresses!=null && emailAddresses.length >= 1 ? emailAddresses[0] : null;
   }
 
   @Override
@@ -76,7 +77,8 @@ public class Order implements OrderEntity {
         .setZip(shipZipCode)
         .setCity(shipCity)
         .setState(shipState)
-        .setCountryCode(shipCountry)
+        // TODO: 21/11/17 a change to iso2 from iso3
+       .setCountryCode(shipCountry)
         .setPhone(shipPhone)
         .createAddress();
   }
