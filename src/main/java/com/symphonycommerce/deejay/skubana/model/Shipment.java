@@ -60,9 +60,8 @@ public class Shipment implements FulfillmentEntity {
 
   @Override
   public FulfillmentStatus getDeliveryStatus() {
-    // TODO: 20/11/17 Ask Art: This needs to be validated
     if (trackingNumber == null) {
-      return FulfillmentStatus.NoChange; // As implemented in sellbrite
+      return FulfillmentStatus.NoChange;
     }
 
     switch (deliveryStatus) {

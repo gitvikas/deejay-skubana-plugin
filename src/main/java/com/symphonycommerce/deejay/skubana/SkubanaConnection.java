@@ -18,7 +18,6 @@ import com.symphonycommerce.deejay.skubana.connector.ConnectionProvider;
 import com.symphonycommerce.deejay.skubana.connector.SkubanaApiListWrapper;
 import com.symphonycommerce.deejay.skubana.model.DistributionCenter;
 import com.symphonycommerce.deejay.skubana.model.Order;
-import com.symphonycommerce.deejay.skubana.model.OrderItemAdjustment;
 import com.symphonycommerce.deejay.skubana.model.Product;
 import com.symphonycommerce.deejay.skubana.model.Shipment;
 import com.symphonycommerce.deejay.skubana.model.UpdateQuantity;
@@ -214,19 +213,11 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
             .post(Entity.json(new ApiPost<>(new Shipment(shipment)))));
   }
 
-  /** Partially cancel items on Channel Advisor. */
+  /** Partially cancel items on Skubana */
   @Override
   public void cancelItems(
       String brand, String marketplace, String orderId, String orderItemId, int qtyToCancel) {
-    OrderItemAdjustment adjustment =
-        OrderItemAdjustment.makeCancellation(qtyToCancel, "Symphony-" + orderItemId);
-    errorsToExceptions(
-        provider
-            .getAuthenticatedClient(brand)
-            .path("/v1/OrderItems({OrderItemID})/Adjust")
-            .resolveTemplate("OrderItemID", orderItemId)
-            .request()
-            .post((Entity.json(adjustment))));
+    throw new UnsupportedOperationException();
   }
 
   /**

@@ -8,14 +8,15 @@ import com.symphonycommerce.deejay.ecommerce.entities.Address;
 import com.symphonycommerce.deejay.ecommerce.entities.AddressBuilder;
 import com.symphonycommerce.deejay.ecommerce.entities.OrderEntity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Order implements OrderEntity {
 
-  @JsonProperty(required = true)
   private Long orderId;
   private Map<String, String> salesChannel;
   private OrderCustomer customer;
@@ -63,7 +64,7 @@ public class Order implements OrderEntity {
   @Override
   public String getEmail() {
     String[] emailAddresses = customer.getEmailAddresses();
-    return emailAddresses!=null && emailAddresses.length >= 1 ? emailAddresses[0] : null;
+    return emailAddresses != null && emailAddresses.length >= 1 ? emailAddresses[0] : "";
   }
 
   @Override
@@ -77,12 +78,12 @@ public class Order implements OrderEntity {
         .setZip(shipZipCode)
         .setCity(shipCity)
         .setState(shipState)
-        // TODO: 21/11/17 a change to iso2 from iso3
-       .setCountryCode(shipCountry)
+        .setCountryCode(iso3CountryCodeToIso2CountryCode(shipCountry))
         .setPhone(shipPhone)
         .createAddress();
   }
 
+  // TODO: 22/11/17 shipment is not a list in skubana response
   @Override
   public List<Shipment> getFulfillments() {
     return shipment;
@@ -93,8 +94,24 @@ public class Order implements OrderEntity {
     return items;
   }
 
+  // TODO: 22/11/17 orderId (integer, optional) in response model of GET /service/v1/orders
   @Override
   public String getIdString() {
     return orderId.toString();
+  }
+
+  // TODO: 22/11/17 This logic does not belongs here. Should be in
+  // com.symphonycommerce.deejay.ecommerce.entities.AddressBuilder
+  // Ideally setCountryCode should be smart enough to do the conversions or throw error if fails
+  private String iso3CountryCodeToIso2CountryCode(String iso3CountryCode) {
+    String[] countries = Locale.getISOCountries();
+    Map<String, Locale> localeMap = new HashMap<String, Locale>(countries.length);
+
+    for (String country : countries) {
+      Locale locale = new Locale("", country);
+      localeMap.put(locale.getISO3Country().toUpperCase(), locale);
+    }
+
+    return localeMap.get(iso3CountryCode).getCountry();
   }
 }

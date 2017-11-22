@@ -7,15 +7,13 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderLineItem implements OrderEntity.OrderLineItem {
-  private String listingSku;
   private int quantityOrdered;
   private Long orderItemId;
+  private Product product;
 
-  // TODO: 20/11/17 This needs to be verified if listing sku is to be picked or any other field like
-  // mastersku, productid
   @Override
   public String getProductId() {
-    return listingSku;
+    return product.getIdString();
   }
 
   @Override
@@ -24,8 +22,8 @@ public class OrderLineItem implements OrderEntity.OrderLineItem {
   }
 
   @Override
-  public List<? extends Adjustment> getAdjustments() {
-    return null;
+  public List<Adjustment> getAdjustments() {
+    throw new IllegalStateException("Adjustments are not supported by Skubana");
   }
 
   @Override
