@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Product implements Entity, ProductEntity {
+public class Product implements ProductEntity {
 
   @JsonProperty("masterSku")
   private String sku;

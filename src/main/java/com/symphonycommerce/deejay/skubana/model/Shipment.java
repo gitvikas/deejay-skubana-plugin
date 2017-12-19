@@ -77,6 +77,9 @@ public class Shipment implements FulfillmentEntity {
         return FulfillmentStatus.Complete;
 
         // TODO: 20/11/17 Ask Skubana what's the use case for this cases.
+        // UNKNOWN: for FBA orders only; we explicitly set this status when the shipment is
+        // "CancelledByFulfiller"
+        // FORWARDED: This is not used anywhere, this should be removed from our code
       case FORWARDED:
       case UNKNOWN:
     }

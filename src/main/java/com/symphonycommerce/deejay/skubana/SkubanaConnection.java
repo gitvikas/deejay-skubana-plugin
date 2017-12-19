@@ -70,9 +70,6 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
   public boolean validateAuthKey(String authKey) {
 
     try {
-      // There isn't a designated way of figuring out if an API key is valid on sellbrite,
-      // the only thing we can do is try a legal request and see if it goes through,
-      // and if we get an exception means the auth keys is not valid.
       provider
           .getAuthenticatedClientByToken(authKey)
           .path("/v1/products")
@@ -97,10 +94,6 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
     return Optional.of(distributionCenterIds.getUnchecked(brand).toString());
   }
 
-  /**
-   * Returns the distribution center that belongs to Symphony. It's identified by the code
-   * "SYMPHONY" and has to be setup within Channel Advisor otherwise this will throw an exception.
-   */
   DistributionCenter findSymphonyDc(String brand) {
     return provider
         .getAuthenticatedClient(brand)
@@ -139,11 +132,6 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
     return (List<OrderEntity>) collectPages(this::getPagedNewOrders, brand);
   }
 
-  /**
-   * Grabs new orders from Channel Advisor. It particularly filers the orders by two conditions: one
-   * is that the order has been paid for and the other is that it contains fulfillment objects that
-   * are targetted for Symphony's fulfillment service by filtering on our local CA DC ID.
-   */
   public ApiListWrapper<? extends OrderEntity> getPagedNewOrders(String brand, Integer page) {
     Integer dcId = distributionCenterIds.getUnchecked(brand);
     Preconditions.checkNotNull(dcId);
@@ -152,16 +140,16 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
         provider
             .getAuthenticatedClient(brand)
             .path("/v1/orders")
-            .queryParam("$expand", "Items($expand=Adjustments),Fulfillments($expand=Items)")
-            .queryParam("exported", false)
-            .queryParam("$skip", page)
-            .queryParam(
-                "$filter",
-                "PaymentStatus eq 'Cleared' and Fulfillments/Any (c: "
-                    + "c/DistributionCenterID eq "
-                    + dcId
-                    + ") and ShippingStatus ne 'Shipped'"
-                    + " and ShippingStatus ne 'Canceled'")
+//            .queryParam("$expand", "Items($expand=Adjustments),Fulfillments($expand=Items)")
+//            .queryParam("exported", false)
+//            .queryParam("$skip", page)
+//            .queryParam(
+//                "$filter",
+//                "PaymentStatus eq 'Cleared' and Fulfillments/Any (c: "
+//                    + "c/DistributionCenterID eq "
+//                    + dcId
+//                    + ") and ShippingStatus ne 'Shipped'"
+//                    + " and ShippingStatus ne 'Canceled'")
             .request()
             .get(new GenericType<ApiListWrapper<Order>>() {});
 
@@ -200,7 +188,6 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
             .post(Entity.json("")));
   }
 
-  /** Tell Channel Advisor that this order has some shipments. */
   @Override
   public void shipOrderFullyOrPartialy(
       String brand, String marketplace, String orderId, FulfillmentEntity shipment) {
@@ -210,7 +197,7 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
             .path("/v1/Orders({orderId})/Ship")
             .resolveTemplate("orderId", orderId)
             .request()
-            .post(Entity.json(new ApiPost<>(new Shipment(shipment)))));
+            .post(Entity.json(new ApiPost<>(new Shipment()))));
   }
 
   /** Partially cancel items on Skubana */
@@ -220,9 +207,7 @@ public class SkubanaConnection implements ConfigurableConnection, EcommerceConne
     throw new UnsupportedOperationException();
   }
 
-  /**
-   * Updates the amount of InStock inventory available on Channel Advisor for a given CA product ID.
-   */
+  // TODO: 24/11/17 Integrate with POST /service/v1.1/inventory/adjust Adjust product stock quantity
   @Override
   public void updateItemInventory(String brand, String productId, Optional<String> dcId, int qty) {
     UpdateQuantity update = UpdateQuantity.makeInventoryUpdate(dcId, qty);

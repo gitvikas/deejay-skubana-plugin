@@ -7,10 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Optional;
 
-// An object that is used to update inventory available at a particular distribution center
-// within Channel Advisor.
-// see: https://developer.channeladvisor
-// .com/working-with-products/quantity/update-quantity-choose-update-type-single-dc-update
 public class UpdateQuantity {
 
   public enum QuantityUpdateType {

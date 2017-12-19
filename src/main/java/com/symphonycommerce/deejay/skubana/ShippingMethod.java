@@ -6,10 +6,6 @@ import com.symphonycommerce.deejay.ecommerce.ShippingMethodMapper;
 
 public class ShippingMethod implements ShippingMethodMapper {
 
-  /**
-   * Provided a Symhony shipping method string like "FEDEX.OVERNIGHT" this method will return the
-   * Channel Advisor carrier class.
-   */
   public String getShippingClass(String symphonyCode) {
     String encoded = map.get(symphonyCode);
     if (encoded == null) {
@@ -19,10 +15,6 @@ public class ShippingMethod implements ShippingMethodMapper {
     return encoded.split("\\.")[1];
   }
 
-  /**
-   * Provided a Symhony shipping method string like "FEDEX.OVERNIGHT" this method will return the
-   * Channel Advisor carrier code.
-   */
   public String getCarrierCode(String symphonyCode) {
     String encoded = map.get(symphonyCode);
     if (encoded == null) {

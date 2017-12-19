@@ -35,14 +35,16 @@ public class Order implements OrderEntity {
   @JsonProperty("orderItems")
   private List<OrderLineItem> items;
 
+  // Market place value should return enum
   @Override
   public String getMarketplace() {
     return salesChannel.get("type");
   }
 
   // TODO: 16/11/17 Ask Skubana: How do I map shipping service information such as “GROUND”
-  // TODO: 20/11/17 Ask Art: How important is getShippingClass. Its not there in skuban api's. what
-  // default value should I return
+  // Skubana response
+  // in Get/orders the info is here
+  // "shipMethod": { "packageTypeId": 0, "shippingCarrier": "UPS", "shippingProviderId": 0, "shippingServiceId": 0
 
   @Override
   public ShippingClass getShippingClass(Optional<String> warehouseId) {
@@ -84,6 +86,7 @@ public class Order implements OrderEntity {
   }
 
   // TODO: 22/11/17 shipment is not a list in skubana response
+  // Because Skubana does not support partial shipment so it is not a list in there response
   @Override
   public List<Shipment> getFulfillments() {
     return shipment;
@@ -95,6 +98,7 @@ public class Order implements OrderEntity {
   }
 
   // TODO: 22/11/17 orderId (integer, optional) in response model of GET /service/v1/orders
+  // Ask skubana what will make the Order identity than
   @Override
   public String getIdString() {
     return orderId.toString();
